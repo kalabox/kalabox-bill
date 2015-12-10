@@ -20,7 +20,7 @@ var actions = [
 function Client(host, port) {
   if (this instanceof Client) {
     this.host = host;
-    this.port = port;
+    this.port = port || 1989;
   } else {
     return new Client(host, port);
   }
