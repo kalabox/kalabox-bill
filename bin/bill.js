@@ -6,7 +6,7 @@ var Client = require('../index.js').client;
 var server = require('../index.js').server;
 
 var host = argv.h || 'localhost';
-var port = argv.p || 8080;
+var port = argv.p || 1989;
 var verbose = argv.v || false;
 var daemon = argv.d || false;
 
