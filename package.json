@@ -1,0 +1,29 @@
+{
+  "name": "kalabox-bill",
+  "version": "0.1.0",
+  "description": "Simple http server and client for executing shell for testing over http.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kalabox/kalabox-bill.git"
+  },
+  "keywords": [
+    "kalabox"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kalabox/kalabox-bill/issues"
+  },
+  "homepage": "https://github.com/kalabox/kalabox-bill#readme",
+  "dependencies": {
+    "bluebird": "^3.0.6",
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "yargs": "^3.31.0"
+  }
+}
