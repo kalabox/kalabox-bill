@@ -35,11 +35,11 @@ curl -sL https://raw.githubusercontent.com/kalabox/kalabox-bill/master/scripts/s
 ### Windows
 
 Download the latest Windows release [here](https://github.com/kalabox/kalabox-bill/releases), rename it `bill.exe` and put it
-someplace safe like `C:\Desktop\.bin\bill.exe`
+someplace safe like `%USERPROFILE%\Desktop\.bin\bill.exe`
 
 Open up `cmd.exe` as Administrator and run
 ```
-schtasks.exe /create /tn "Bill" /ru SYSTEM /Sc ONSTART /RL HIGHEST /tr "C:\Desktop\.bin\bill.exe -d"
+schtasks.exe /create /tn "Bill" /ru SYSTEM /sc ONSTART /rl HIGHEST /tr "%USERPROFILE%\Desktop\.bin\bill.exe -d"
 ```
 
 ### Linux
