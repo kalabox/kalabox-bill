@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 
+// If this is a JXP packaged binary we need to shift our args
+// We need to do it this way here vs global config because we parse before
+// we init
+if (process.isPackaged || process.IsEmbedded) {
+  process.argv.unshift(process.argv[0]);
+}
+
 var argv = require('yargs').argv;
 
 var Client = require('../index.js').client;
@@ -27,7 +34,7 @@ if (!daemon) {
   client.on('event', function(evt) {
     if (verbose) {
       console.log(evt);
-    } 
+    }
   });
 
   client.on('exit', function(data) {

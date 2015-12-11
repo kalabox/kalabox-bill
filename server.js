@@ -51,14 +51,14 @@ app.post('/sh/', function(req, res) {
     // Write chunks of stdout to client.
     ps.stdout.on('data', function(data) {
       write({
-        stdout: data  
+        stdout: data
       });
     });
 
     // Write chunks of stderr to client.
     ps.stderr.on('data', function(data) {
       write({
-        stderr: data    
+        stderr: data
       });
     });
 
