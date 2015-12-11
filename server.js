@@ -26,7 +26,7 @@ app.post('/sh/', function(req, res) {
   var state = {};
 
   function write(obj) {
-    res.write(JSON.stringify(obj));
+    res.write(JSON.stringify(obj) + '\n');
   }
 
   Promise.try(function() {

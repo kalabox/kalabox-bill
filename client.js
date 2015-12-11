@@ -6,6 +6,7 @@ var http = require('http');
 var url = require('url');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
+var JSONStream = require('json-stream');
 
 var actions = [
   'debug',
@@ -50,8 +51,9 @@ Client.prototype.sh = function(cmd) {
 
     var req = http.request(opts, function(res) {
       res.setEncoding('utf8');
-      res.on('data', function(data) {
-        var evt = JSON.parse(data);
+      var events = new JSONStream();
+      res.pipe(events);
+      events.on('data', function(evt) {
         var action = _.find(actions, function(action) {
           return evt[action];
         });
