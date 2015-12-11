@@ -21,7 +21,7 @@ bill.js -d
 or for a custom port...
 
 ```
-/node_modules/kalabox-bill/bin/bill.js -d -p 1989
+bill.js -d -p 1991
 ```
 
 ## Running Bill as a start up service
@@ -33,6 +33,14 @@ curl -sL https://raw.githubusercontent.com/kalabox/kalabox-bill/master/scripts/s
 ```
 
 ### Windows
+
+Download the latest Windows release [here](https://github.com/kalabox/kalabox-bill/releases), rename it `bill.exe` and put it
+someplace safe like `C:\Desktop\.bin\bill.exe`
+
+Open up `cmd.exe` as Administrator and run
+```
+schtasks.exe /create /tn "Bill" /ru SYSTEM /Sc ONSTART /RL HIGHEST /tr "C:\Desktop\.bin\bill.exe -d"
+```
 
 ### Linux
 
