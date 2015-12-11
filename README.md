@@ -10,7 +10,6 @@ Or install with NPM
 
 ```
 npm install -g kalabox-bill
-
 ```
 
 ## Usage
@@ -29,13 +28,17 @@ or for a custom port...
 
 ### Darwin
 
-Build an app with automater and add it to your login items.
-
-http://stackoverflow.com/questions/6442364/running-script-upon-login-mac/6445525#6445525
+```
+curl -sL https://raw.githubusercontent.com/kalabox/kalabox-bill/master/scripts/startup_osx.sh | sudo bash
+```
 
 ### Windows
 
 ### Linux
+
+```
+curl -sL https://raw.githubusercontent.com/kalabox/kalabox-bill/master/scripts/startup_linux.sh | sudo bash
+```
 
 ## Building Bill
 

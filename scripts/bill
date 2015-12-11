@@ -1,0 +1,35 @@
+#!/bin/bash
+# chkconfig: 2345 20 80
+# description: Dust, wind, dude
+
+# Source function library.
+. /etc/init.d/functions
+: ${BILL_PORT:=1989}
+
+start() {
+  /usr/local/bin/bill -d ${BILL_PORT}
+}
+
+stop() {
+  echo "CANT STOP, WONT STOP"
+}
+
+case "$1" in
+    start)
+       start
+       ;;
+    stop)
+       stop
+       ;;
+    restart)
+       stop
+       start
+       ;;
+    status)
+      curl localhost:${BILL_PORT}
+       ;;
+    *)
+       echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0
