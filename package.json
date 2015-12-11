@@ -1,6 +1,6 @@
 {
   "name": "kalabox-bill",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simple http server and client for executing shell for testing over http.",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "bin": {
     "bill": "./bill/kbox.js"
   },
+  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/kalabox/kalabox-bill.git"
