@@ -46,6 +46,7 @@ fi
 # Add script to rc.local
 if [ "${FLAVOR}" == "debian" ]; then
   echo "/usr/local/bin/bill -d" >> /etc/rc.local
+  chmod +x /etc/rc.local
 elif [ "${FLAVOR}" == "fedora" ]; then
   curl -O https://raw.githubusercontent.com/kalabox/kalabox-bill/master/scripts/bill
   mv bill /etc/init.d/bill
