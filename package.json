@@ -1,13 +1,13 @@
 {
   "name": "kalabox-bill",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Simple http server and client for executing shell for testing over http.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "bill": "./bill/kbox.js"
+    "bill": "./bin/bill.js"
   },
   "preferGlobal": true,
   "repository": {
