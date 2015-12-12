@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var Promise = require('bluebird');
 var exec = require('child_process').exec;
+var os = require('os');
 
 // Create app.
 var app = express();
@@ -22,6 +23,10 @@ app.post('/sh/', function(req, res) {
     encoding: 'utf8',
     timeout: 0
   };
+
+  if (os.platform !== 'win32') {
+    opts.shell = '/bin/bash';
+  }
 
   var state = {};
 
