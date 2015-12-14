@@ -5,6 +5,10 @@ var bodyParser = require('body-parser');
 var Promise = require('bluebird');
 var exec = require('child_process').exec;
 var os = require('os');
+var path = require('path');
+var fs = require('fs');
+var uuid = require('uuid');
+var util = require('util');
 
 // Create app.
 var app = express();
@@ -30,19 +34,44 @@ app.post('/sh/', function(req, res) {
 
   var state = {};
 
+  var writes = Promise.resolve();
+
   function write(obj) {
-    res.write(JSON.stringify(obj) + '\n');
+    writes = writes.then(function() {
+      return Promise.fromNode(function(cb) {
+        res.write(JSON.stringify(obj) + '\n', cb);
+      });
+    });
   }
 
-  Promise.try(function() {
+  return Promise.try(function() {
+
+    var file = path.join(
+      os.tmpdir(),
+      uuid.v4()
+    );
+
+    return Promise.fromNode(function(cb) {
+      fs.writeFile(file, req.body.cmd, {encoding: 'utf8'}, cb);
+    })
+    .return(file)
+    .tap(function(file) {
+      console.log(file);
+    });
+
+  })
+
+  .then(function(file) {
+
+    var cmd = util.format('/bin/bash %s', file);
 
     // Start execution of child process.
-    var ps = exec(req.body.cmd, opts);
+    var ps = exec(cmd, opts);
 
     // Write debug information.
     write({
       debug: {
-        cmd: req.body.cmd
+        cmd: cmd
       }
     });
 
@@ -95,8 +124,11 @@ app.post('/sh/', function(req, res) {
         code: state.code
       }
     });
-    // End response.
-    res.end();
+    // Wait for all writes to finish.
+    return writes.then(function() {
+      // End response.
+      res.end();
+    });
   });
 
 });

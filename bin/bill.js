@@ -41,7 +41,15 @@ if (!daemon) {
     process.exit(data.code);
   });
 
-  client.sh(argv._.join(' '));
+  if (argv.f) {
+    client.sh({
+      file: argv.f
+    });
+  } else {
+    client.sh({
+      cmd: argv._.join(' ')
+    });
+  }
 
 } else {
 
