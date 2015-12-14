@@ -25,7 +25,8 @@ app.post('/sh/', function(req, res) {
 
   var opts = {
     encoding: 'utf8',
-    timeout: 0
+    timeout: 0,
+    env: process.env
   };
 
   if (os.platform !== 'win32') {
