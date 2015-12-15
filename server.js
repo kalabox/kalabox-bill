@@ -53,7 +53,11 @@ app.post('/sh/', function(req, res) {
     );
 
     return Promise.fromNode(function(cb) {
-      fs.writeFile(file, req.body.cmd, {encoding: 'utf8'}, cb);
+      fs.writeFile(file,
+        req.body.cmd,
+        {encoding: 'utf8', mode: '0700'},
+        cb
+      );
     })
     .return(file)
     .tap(function(file) {
