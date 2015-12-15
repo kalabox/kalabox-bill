@@ -8,6 +8,7 @@ if (process.isPackaged || process.IsEmbedded) {
 }
 
 var argv = require('yargs').argv;
+var _ = require('lodash');
 
 var Client = require('../index.js').client;
 var server = require('../index.js').server;
@@ -16,6 +17,13 @@ var host = argv.h || 'localhost';
 var port = argv.p || 1989;
 var verbose = argv.v || false;
 var daemon = argv.d || false;
+
+if (argv.e) {
+  var env = JSON.parse(argv.e);
+  _.each(env, function(val, key) {
+    process.env[key] = val;
+  });
+}
 
 if (!daemon) {
 
