@@ -8,6 +8,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var JSONStream = require('json-stream');
 var fs = require('fs');
+var path = require('path');
 
 var actions = [
   'debug',
@@ -97,6 +98,52 @@ Client.prototype.sh = function(config) {
     
   });
   
+};
+
+Client.prototype.copy = function(config) {
+
+  var self = this;
+
+  return Promise.try(function() {
+    return Promise.fromNode(function(cb) {
+      fs.readFile(config.file, {encoding: 'utf8'}, cb);
+    });
+  })
+  .then(function(data) {
+
+    return Promise.fromNode(function(cb) {
+
+      var postData = {
+        file: path.basename(config.file),
+        data: data
+      };
+
+      postData = JSON.stringify(postData);
+
+      var opts = {
+        hostname: self.host,
+        port: self.port,
+        path: '/copy',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': postData.length
+        }
+      };
+
+      var req = http.request(opts, function(res) {
+        res.setEncoding('utf8');
+        res.on('error', cb);
+        res.on('end', cb);
+      });
+
+      req.write(postData);
+      req.end();
+
+    });
+
+  });
+
 };
 
 module.exports = Client;

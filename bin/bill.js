@@ -73,7 +73,11 @@ if (!daemon) {
     config.password = parts[1];
   }
 
-  client.sh(config);
+  if (argv.copy) {
+    client.copy(config);
+  } else {
+    client.sh(config);
+  }
 
 } else {
 

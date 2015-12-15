@@ -16,6 +16,36 @@ var app = express();
 // Use json body parser plugin.
 app.use(bodyParser.json());
 
+app.post('/copy/', function(req, res) {
+
+  console.log('REQUEST: %s', JSON.stringify(req.body));
+
+  res.setHeader('Content-Type', 'applicatin/json; charset=UTF-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
+
+  return Promise.fromNode(function(cb) {
+    var file = path.join(
+      os.tmpdir(),
+      path.basename(req.body.file)
+    );
+    console.log(file);
+    fs.writeFile(file,
+      req.body.data,
+      {encoding: 'utf8', mode: '0770'},
+      cb
+    );
+  })
+  .then(function() {
+    return Promise.fromNode(function(cb) {
+      res.write(JSON.stringify({status: 'OK'}), cb);
+    });
+  })
+  .then(function() {
+    res.end();
+  })
+
+});
+
 app.post('/sh/', function(req, res) {
 
   console.log('REQUEST: %s', JSON.stringify(req.body));
