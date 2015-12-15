@@ -49,6 +49,16 @@ module.exports = function(grunt) {
 
     // Some helpful file groups
     files: {
+      // Files to check codes
+      js: {
+        src: [
+          '*.js',
+          'examples/**/*,js',
+          'bin/**/*.js',
+          '*.js',
+          'Gruntfile.js'
+        ]
+      },
       // Relevant build files
       build: {
         src: [
@@ -97,6 +107,21 @@ module.exports = function(grunt) {
       }
     },
 
+    // Some linting and code standards
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
+      },
+      all: ['Gruntfile.js', '<%= files.js.src %>']
+    },
+    jscs: {
+      src: ['Gruntfile.js', '<%= files.js.src %>'],
+      options: {
+        config: '.jscsrc'
+      }
+    }
+
   };
 
   //--------------------------------------------------------------------------
@@ -120,6 +145,12 @@ module.exports = function(grunt) {
     'copy:build',
     'shell:build',
     'copy:dist'
+  ]);
+
+  // Test our codes
+  grunt.registerTask('test', [
+    'jshint',
+    'jscs'
   ]);
 
 };

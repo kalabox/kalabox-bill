@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 // If this is a JXP packaged binary we need to shift our args
 // We need to do it this way here vs global config because we parse before
 // we init

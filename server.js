@@ -42,7 +42,7 @@ app.post('/copy/', function(req, res) {
   })
   .then(function() {
     res.end();
-  })
+  });
 
 });
 

@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var Promise = require('bluebird');
 var http = require('http');
-var url = require('url');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var JSONStream = require('json-stream');
@@ -95,9 +94,9 @@ Client.prototype.sh = function(config) {
       req.end();
 
     });
-    
+
   });
-  
+
 };
 
 Client.prototype.copy = function(config) {
