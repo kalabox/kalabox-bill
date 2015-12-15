@@ -55,7 +55,7 @@ app.post('/sh/', function(req, res) {
     return Promise.fromNode(function(cb) {
       fs.writeFile(file,
         req.body.cmd,
-        {encoding: 'utf8', mode: '0700'},
+        {encoding: 'utf8', mode: '0777'},
         cb
       );
     })
@@ -84,6 +84,8 @@ app.post('/sh/', function(req, res) {
   })
 
   .then(function(cmd) {
+
+    console.log('CMD: %s', cmd);
 
     // Start execution of child process.
     var ps = exec(cmd, opts);
