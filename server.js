@@ -60,7 +60,7 @@ app.post('/sh/', function(req, res) {
     maxBuffer: 20 * 1024 * 1024
   };
 
-  if (os.platform !== 'win32') {
+  if (os.platform() !== 'win32') {
     opts.shell = '/bin/bash';
   }
 
@@ -99,7 +99,7 @@ app.post('/sh/', function(req, res) {
 
   .then(function(file) {
 
-    if (os.platform === 'win32') {
+    if (os.platform() === 'win32') {
       throw new Error('Not setup to run on platform yet: ' + os.platform);
     } else {
       var user = req.body.user || 'kalabox';
