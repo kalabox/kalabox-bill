@@ -68,7 +68,22 @@ app.post('/sh/', function(req, res) {
 
   .then(function(file) {
 
-    var cmd = util.format('/bin/bash %s', file);
+    if (os.platform === 'win32') {
+      throw new Error('Not setup to run on platform yet: ' + os.platform);
+    } else {
+      var user = req.body.user || 'kalabox';
+      var password = req.body.password || 'kalabox';
+      return util.format(
+        'echo "%s" | sudo -S -i -u %s /bin/bash %s',
+        password,
+        user,
+        file
+      );
+    }
+
+  })
+
+  .then(function(cmd) {
 
     // Start execution of child process.
     var ps = exec(cmd, opts);

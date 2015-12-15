@@ -39,6 +39,16 @@ if (!daemon) {
     process.stdout.write(data);
   });
 
+  client.on('stderr', function(evt) {
+    var data;
+    try {
+      data = JSON.parse(evt);
+    } catch (err) {
+      data = evt;
+    }
+    process.stderr.write(data);
+  });
+
   client.on('event', function(evt) {
     if (verbose) {
       console.log(evt);
@@ -49,15 +59,21 @@ if (!daemon) {
     process.exit(data.code);
   });
 
+  var config = {};
+
   if (argv.f) {
-    client.sh({
-      file: argv.f
-    });
+    config.file = argv.f;
   } else {
-    client.sh({
-      cmd: argv._.join(' ')
-    });
+    config.cmd = argv._.join(' ');
   }
+
+  if (argv.u) {
+    var parts = argv.u.split(':');
+    config.user = parts[0];
+    config.password = parts[1];
+  }
+
+  client.sh(config);
 
 } else {
 

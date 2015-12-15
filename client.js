@@ -48,9 +48,17 @@ Client.prototype.sh = function(config) {
 
     return Promise.fromNode(function(cb) {
 
-      var postData = JSON.stringify({
+      var postData = {
         cmd: cmd
-      });
+      };
+      if (config.user) {
+        postData.user = config.user;
+      }
+      if (config.password) {
+        postData.password = config.password;
+      }
+
+      postData = JSON.stringify(postData);
 
       var opts = {
         hostname: self.host,
