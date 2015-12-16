@@ -50,7 +50,7 @@ app.post('/sh/', function(req, res) {
 
   console.log('REQUEST: %s', JSON.stringify(req.body));
 
-  res.setHeader('Content-Type', 'applicatin/json; charset=UTF-8');
+  res.setHeader('Content-Type', 'application/json; charset=UTF-8');
   res.setHeader('Transfer-Encoding', 'chunked');
 
   var opts = {
@@ -60,7 +60,10 @@ app.post('/sh/', function(req, res) {
     maxBuffer: 20 * 1024 * 1024
   };
 
-  if (os.platform() !== 'win32') {
+  if (os.platform() === 'win32') {
+    opts.shell = 'cmd.exe';
+  }
+  else {
     opts.shell = '/bin/bash';
   }
 
@@ -78,9 +81,10 @@ app.post('/sh/', function(req, res) {
 
   return Promise.try(function() {
 
+    var ext = (os.platform() === 'win32') ? 'bat' : 'sh';
     var file = path.join(
       os.tmpdir(),
-      uuid.v4()
+      [uuid.v4(), ext].join('.')
     );
 
     return Promise.fromNode(function(cb) {
@@ -98,12 +102,11 @@ app.post('/sh/', function(req, res) {
   })
 
   .then(function(file) {
-
+    var user = req.body.user || 'kalabox';
+    var password = req.body.password || 'kalabox';
     if (os.platform() === 'win32') {
-      throw new Error('Not setup to run on platform yet: ' + os.platform);
+      return util.format('"%s"', file);
     } else {
-      var user = req.body.user || 'kalabox';
-      var password = req.body.password || 'kalabox';
       return util.format(
         'echo "%s" | sudo -S -i -u %s /bin/bash %s',
         password,
