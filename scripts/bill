@@ -7,7 +7,7 @@
 : ${BILL_PORT:=1989}
 
 start() {
-  /usr/local/bin/bill -d ${BILL_PORT} -e '{"KALABOX_ENV": "true"}'
+  /usr/local/bin/bill -d -p ${BILL_PORT} -e '{"KALABOX_ENV": "true"}'
 }
 
 stop() {
