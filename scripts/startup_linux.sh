@@ -6,7 +6,7 @@
 #
 
 # Bill vars dude!
-BILL_VERSION=v0.1.9
+BILL_VERSION=v0.1.10
 
 # Move to the tempdir to get stuff
 cd /tmp
