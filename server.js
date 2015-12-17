@@ -16,6 +16,20 @@ var app = express();
 // Use json body parser plugin.
 app.use(bodyParser.json());
 
+app.get('/env/', function(req, res) {
+  console.log('ENV: get');
+  res.write(JSON.stringify(process.env));
+  res.end();
+});
+
+app.post('/env/:key', function(req, res) {
+  var key = req.params.key;
+  var val = req.body.val;
+  console.log('ENV: set %s=%s', key, val);
+  process.env[key] = val;
+  res.end();
+});
+
 app.post('/copy/', function(req, res) {
 
   console.log('REQUEST: %s', JSON.stringify(req.body));
