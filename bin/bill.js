@@ -20,65 +20,82 @@ var port = argv.p || 1989;
 var verbose = argv.v || false;
 var daemon = argv.d || false;
 
-if (argv.e) {
-  var env = JSON.parse(argv.e);
-  _.each(env, function(val, key) {
-    process.env[key] = val;
-  });
-}
-
 if (!daemon) {
 
   var client = new Client(host, port);
+  var cat = argv._[0];
+  var action = argv._[1];
 
-  client.on('stdout', function(evt) {
-    var data;
-    try {
-      data = JSON.parse(evt);
-    } catch (err) {
-      data = evt;
+  if (cat === 'env') {
+
+    if (action === 'get') {
+
+      client.getEnv()
+      .then(function(result) {
+        console.log(result);
+      });
+
+    } else if (action === 'set') {
+
+      var key = argv._[2];
+      var val = argv._[3];
+
+      client.setEnv(key, val);
+
     }
-    process.stdout.write(data);
-  });
 
-  client.on('stderr', function(evt) {
-    var data;
-    try {
-      data = JSON.parse(evt);
-    } catch (err) {
-      data = evt;
+  } else if (cat === 'sh') {
+
+    client.on('stdout', function(evt) {
+      var data;
+      try {
+        data = JSON.parse(evt);
+      } catch (err) {
+        data = evt;
+      }
+      process.stdout.write(data);
+    });
+
+    client.on('stderr', function(evt) {
+      var data;
+      try {
+        data = JSON.parse(evt);
+      } catch (err) {
+        data = evt;
+      }
+      process.stderr.write(data);
+    });
+
+    client.on('event', function(evt) {
+      if (verbose) {
+        console.log(evt);
+      }
+    });
+
+    client.on('exit', function(data) {
+      process.exit(data.code);
+    });
+
+    var config = {};
+
+    if (argv.f) {
+      config.file = argv.f;
+    } else {
+      config.cmd = argv._.join(' ');
     }
-    process.stderr.write(data);
-  });
 
-  client.on('event', function(evt) {
-    if (verbose) {
-      console.log(evt);
+    if (argv.u) {
+      var parts = argv.u.split(':');
+      config.user = parts[0];
+      config.password = parts[1];
     }
-  });
 
-  client.on('exit', function(data) {
-    process.exit(data.code);
-  });
+    if (argv.copy) {
+      client.copy(config);
+    } else {
+      client.sh(config);
+    }
 
-  var config = {};
-
-  if (argv.f) {
-    config.file = argv.f;
-  } else {
-    config.cmd = argv._.join(' ');
-  }
-
-  if (argv.u) {
-    var parts = argv.u.split(':');
-    config.user = parts[0];
-    config.password = parts[1];
-  }
-
-  if (argv.copy) {
-    client.copy(config);
-  } else {
-    client.sh(config);
   }
 
 } else {
