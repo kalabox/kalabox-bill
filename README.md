@@ -39,10 +39,10 @@ someplace safe like `%USERPROFILE%\Desktop\.bin\bill.exe`
 
 Open up `cmd.exe` as Administrator and run
 ```
-schtasks.exe /create /tn "Bill" /ru SYSTEM /sc ONSTART /rl HIGHEST /tr "%USERPROFILE%\Desktop\.bin\bill.exe -d"
+schtasks.exe /create /tn "Bill" /ru kalabox /rp kalabox /sc ONSTART /tr "%USERPROFILE%\Desktop\.bin\bill.exe -d"
 ```
 
-You will also need to make sure that Bill is allowed through the Windows Firewall.
+You will also need to make sure that Bill is allowed through the Windows Firewall. You will also want to replace the first `kalabox` with the user you want to run bill as and the second `kalabox` with their password.
 
 ### Linux
 
