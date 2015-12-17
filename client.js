@@ -132,6 +132,9 @@ Client.prototype.copy = function(config) {
 
       var req = http.request(opts, function(res) {
         res.setEncoding('utf8');
+        res.on('data', function(data) {
+          self.emit('data', data);
+        });
         res.on('error', cb);
         res.on('end', cb);
       });
