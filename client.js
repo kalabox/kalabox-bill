@@ -10,6 +10,7 @@ var fs = require('fs');
 var path = require('path');
 var rest = require('restler');
 var url = require('url');
+var VError = require('verror');
 
 var actions = [
   'debug',
@@ -45,7 +46,13 @@ Client.prototype.getEnv = function() {
       })
     )
     .on('success', function(data) {
-      cb(null, data);
+      Promise.try(function() {
+        return JSON.parse(data);
+      })
+      .catch(function(err) {
+        throw new VError(err, 'Error parsing json data: ' + data);
+      })
+      .nodeify(cb);
     })
     .on('error', cb)
     .on('fail', function(data) {

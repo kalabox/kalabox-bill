@@ -32,7 +32,7 @@ if (!daemon) {
 
       client.getEnv()
       .then(function(result) {
-        console.log(result);
+        console.log(JSON.stringify(result));
       });
 
     } else if (action === 'set') {
