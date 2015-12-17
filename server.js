@@ -20,7 +20,7 @@ app.post('/copy/', function(req, res) {
 
   console.log('REQUEST: %s', JSON.stringify(req.body));
 
-  res.setHeader('Content-Type', 'applicatin/json; charset=UTF-8');
+  res.setHeader('Content-Type', 'application/json; charset=UTF-8');
   res.setHeader('Transfer-Encoding', 'chunked');
 
   return Promise.fromNode(function(cb) {
