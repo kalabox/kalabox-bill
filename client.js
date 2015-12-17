@@ -8,6 +8,8 @@ var EventEmitter = require('events').EventEmitter;
 var JSONStream = require('json-stream');
 var fs = require('fs');
 var path = require('path');
+var rest = require('restler');
+var url = require('url');
 
 var actions = [
   'debug',
@@ -28,6 +30,58 @@ function Client(host, port) {
   }
 }
 util.inherits(Client, EventEmitter);
+
+Client.prototype.getEnv = function() {
+
+  var self = this;
+
+  return Promise.fromNode(function(cb) {
+    rest.get(
+      url.format({
+        protocol: 'http',
+        hostname: self.host,
+        port: self.port,
+        pathname: 'env'
+      })
+    )
+    .on('success', function(data) {
+      cb(null, data);
+    })
+    .on('error', cb)
+    .on('fail', function(data) {
+      cb(new Error(data));
+    });
+  });
+
+};
+
+Client.prototype.setEnv = function(key, val) {
+
+  var self = this;
+
+  return Promise.fromNode(function(cb) {
+    console.log(val);
+    rest.postJson(
+      url.format({
+        protocol: 'http',
+        hostname: self.host,
+        port: self.port,
+        pathname: 'env/' + key
+      }),
+      {
+        val: val
+      }
+    )
+    .on('success', function(data) {
+      cb(null, data);
+    })
+    .on('error', cb)
+    .on('fail', function(data) {
+      cb(new Error(data));
+    });
+  });
+
+};
 
 Client.prototype.sh = function(config) {
 
