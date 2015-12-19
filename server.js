@@ -17,17 +17,30 @@ var app = express();
 app.use(bodyParser.json());
 
 app.get('/env/', function(req, res) {
-  console.log('ENV: get');
-  res.write(JSON.stringify(process.env));
-  res.end();
+  Promise.try(function() {
+    throw new Error('FUCK YOU!');
+    console.log('ENV: get');
+    res.write(JSON.stringify(process.env));
+    res.end();
+  })
+  .catch(function(err) {
+    res.json({err: err.message});
+    res.status(500);
+  });
 });
 
 app.post('/env/:key', function(req, res) {
-  var key = req.params.key;
-  var val = req.body.val;
-  console.log('ENV: set %s=%s', key, val);
-  process.env[key] = val;
-  res.end();
+  Promise.try(function() {
+    var key = req.params.key;
+    var val = req.body.val;
+    console.log('ENV: set %s=%s', key, val);
+    process.env[key] = val;
+    res.end();
+  })
+  .catch(function(err) {
+    res.json({err: err.message});
+    res.status(500);
+  });
 });
 
 app.post('/copy/', function(req, res) {
@@ -56,6 +69,10 @@ app.post('/copy/', function(req, res) {
   })
   .then(function() {
     res.end();
+  })
+  .catch(function(err) {
+    res.json({err: err.message});
+    res.status(500);
   });
 
 });
@@ -199,6 +216,10 @@ app.post('/sh/', function(req, res) {
       // End response.
       res.end();
     });
+  })
+  .catch(function(err) {
+    res.json({err: err.message});
+    res.status(500);
   });
 
 });
