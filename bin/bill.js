@@ -81,7 +81,7 @@ if (!daemon) {
     if (argv.f) {
       config.file = argv.f;
     } else {
-      config.cmd = argv._.join(' ');
+      config.cmd = argv._.slice(1).join(' ');
     }
 
     if (argv.u) {
