@@ -1,6 +1,6 @@
 {
   "name": "kalabox-bill",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Simple http server and client for executing shell for testing over http.",
   "main": "index.js",
   "scripts": {
