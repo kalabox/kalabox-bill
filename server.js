@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var express = require('express');
 var bodyParser = require('body-parser');
 var Promise = require('bluebird');
@@ -18,7 +19,6 @@ app.use(bodyParser.json());
 
 app.get('/env/', function(req, res) {
   Promise.try(function() {
-    throw new Error('FUCK YOU!');
     console.log('ENV: get');
     res.write(JSON.stringify(process.env));
     res.end();
@@ -112,6 +112,15 @@ app.post('/sh/', function(req, res) {
 
   return Promise.try(function() {
 
+    // Validate request.
+    if (!req.body.cmd || typeof req.body.cmd !== 'string') {
+      console.log(typeof req.body.cmd);
+      throw new Error('Invalid request: ' + JSON.stringify(req.body));
+    }
+    if (req.body.args && !_.isArray(req.body.args)) {
+      throw new Error('Invalid request args: ' + JSON.stringify(req.body));
+    }
+
     var ext = (os.platform() === 'win32') ? 'bat' : 'sh';
     var file = path.join(
       os.tmpdir(),
@@ -132,20 +141,28 @@ app.post('/sh/', function(req, res) {
 
   })
 
+  // Build command to execute.
   .then(function(file) {
+    // Build an args string for passing arguments into file.
+    var args = req.body.args ? req.body.args.join(' ') : '' ;
     var user = req.body.user || 'kalabox';
     var password = req.body.password || 'kalabox';
     if (os.platform() === 'win32') {
-      return util.format('"%s"', file);
+      return util.format('"%s" %s', file, args);
     } else {
       return util.format(
-        'echo "%s" | sudo -S -i -u %s /bin/bash %s',
+        'echo "%s" | sudo -S -i -u %s /bin/bash %s %s',
         password,
         user,
-        file
+        file,
+        args
       );
     }
+  })
 
+  // Clean up command a little.
+  .then(function(cmd) {
+    return _.trim(cmd);
   })
 
   .then(function(cmd) {

@@ -15,6 +15,7 @@ var VError = require('verror');
 var actions = [
   'debug',
   'end',
+  'err',
   'event',
   'exit',
   'ping',
@@ -117,6 +118,9 @@ Client.prototype.sh = function(config) {
       }
       if (config.password) {
         postData.password = config.password;
+      }
+      if (config.args) {
+        postData.args = config.args;
       }
 
       postData = JSON.stringify(postData);

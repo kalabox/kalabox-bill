@@ -80,6 +80,7 @@ if (!daemon) {
 
     if (argv.f) {
       config.file = argv.f;
+      config.args = argv._.slice(1)
     } else {
       config.cmd = argv._.slice(1).join(' ');
     }
